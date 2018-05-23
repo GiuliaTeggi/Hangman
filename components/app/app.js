@@ -1,3 +1,4 @@
 import  React from 'react'; 
+import Title from '../title/title'; 
 
-export default () => <h1>Hello World</h1>; 
+export default () => <React.Fragment><Title /></React.Fragment>; 
