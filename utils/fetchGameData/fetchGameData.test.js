@@ -1,29 +1,36 @@
 import fetchGameData from './fetchGameData';
 import dummyGameData from './dummyGameData'
+import fetchMock from "fetch-mock";
 
-test('test jest is working', () => {
-  expect(true).toBeTruthy();
-})
+describe('Test fetchGameData', () => {
 
-test('Test fetchGameData', () => {
-  return fetchGameData()
-    .then((countriesArray) => {
-      console.log(`
-        From fetch ${countriesArray.length}, 
-        From dummy ${dummyGameData.length}
-      `);
-      console.log()
-    });
-})
+  beforeAll(() => fetchMock.get('begin:https://restcountries.eu/rest/v2/region/', dummyGameData));
 
-test('Test fetchGameData response format', async () => {
-  const countriesArray = await fetchGameData()
-  const mergedContriesObj = countriesArray
-  .reduce((accumulator, currentObj) => Object.assign(accumulator, currentObj), {});
-  const countryObjectPropsArrray = Object.keys(mergedContriesObj)
-  expect(countryObjectPropsArrray.length).toBe(2)
-  expect(countryObjectPropsArrray.includes('country')).toBeTruthy()
-  expect(countryObjectPropsArrray.includes('city')).toBeTruthy()
-  
+  afterAll(() => fetchMock.restore());
 
+  test('Test fetchGameData is mocked', () => {
+    return fetchGameData()
+      .then((countriesArray) => {
+        expect(countriesArray.length).toBe(dummyGameData.length);
+      });
+  });
+
+  test('Test fetchGameData response format', async () => {
+    const countriesArray = await fetchGameData();
+    expect(countriesArray.length).toBe(dummyGameData.length);
+    const mergedCountriesObj = countriesArray
+      .reduce((accumulator, currentObj) => Object.assign(accumulator, currentObj), {});
+    const countryObjectPropsArray = Object.keys(mergedCountriesObj);
+    expect(countryObjectPropsArray.length).toBe(2);
+    expect(countryObjectPropsArray).toEqual(expect.arrayContaining(['country', 'city']));
+  });
+});
+
+describe('Test fetchGameData after mocking', () => {
+  test('Test fetchGameData was mocked', () => {
+    return fetchGameData()
+      .then((countriesArray) => {
+        expect(countriesArray.length).not.toBe(dummyGameData.length)
+      });
+  });
 })
