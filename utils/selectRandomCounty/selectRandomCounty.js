@@ -1,3 +1,1 @@
-export default (array) => {
-  return array[Math.floor(array.length * Math.random())]
-}
+export default (array) => array[Math.floor(array.length * Math.random())]
