@@ -1,19 +1,29 @@
-// import 'whatwg-fetch';
-import fetchGameData from "./fetchGameData";
+import fetchGameData from './fetchGameData';
+import dummyGameData from './dummyGameData'
 
 test('test jest is working', () => {
   expect(true).toBeTruthy();
 })
 
-// test('fetching game data', async () => {
-//   const res = await fetchGameData()
-//   console.log(Object.keys(res))
-// })
-
-test('fetching game data', () => {
+test('Test fetchGameData', () => {
   return fetchGameData()
-    .then((res) => {
-      console.log(Object.keys(res))
-    })
+    .then((countriesArray) => {
+      console.log(`
+        From fetch ${countriesArray.length}, 
+        From dummy ${dummyGameData.length}
+      `);
+      console.log()
+    });
 })
 
+test('Test fetchGameData response format', async () => {
+  const countriesArray = await fetchGameData()
+  const mergedContriesObj = countriesArray
+  .reduce((accumulator, currentObj) => Object.assign(accumulator, currentObj), {});
+  const countryObjectPropsArrray = Object.keys(mergedContriesObj)
+  expect(countryObjectPropsArrray.length).toBe(2)
+  expect(countryObjectPropsArrray.includes('country')).toBeTruthy()
+  expect(countryObjectPropsArrray.includes('city')).toBeTruthy()
+  
+
+})
