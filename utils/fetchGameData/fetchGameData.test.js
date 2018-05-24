@@ -2,6 +2,7 @@ import fetchGameData from './fetchGameData';
 import dummyGameData from './dummyGameData'
 import fetchMock from "fetch-mock";
 
+/* eslint-disable */
 describe('Test fetchGameData', () => {
 
   beforeAll(() => fetchMock.get('begin:https://restcountries.eu/rest/v2/region/', dummyGameData));
