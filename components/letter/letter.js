@@ -6,7 +6,7 @@ const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
 
 const Letters = () => {
     const listItems = alphabet.map((el) =>
-        <li key={el}><a href="" onClick={(e) => e.preventDefault()}>{el}</a></li>);
+    <li key={el}><button>{el}</button></li>); 
     return (
         <ul className="letterName">{listItems}</ul>
     );
