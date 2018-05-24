@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 
-export default () => fetch('https://restcountries.eu/rest/v2/region/europe')
+// eslint-disable-next-line
+export default (region = 'europe') => fetch(`https://restcountries.eu/rest/v2/region/${region}`)
   .then(res => {
     if (res.status !== 200) {
       throw new Error(`Fetch responded with status: ${res.status}`);
