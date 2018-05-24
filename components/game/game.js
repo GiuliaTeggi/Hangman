@@ -1,7 +1,7 @@
 import React from 'react';
-import Hint from '../hint/hint'; 
-import Chance from '../chance/chance'; 
-import Answer from '../answer/answer'; 
+import Hint from '../hint/hint';
+import Chance from '../chance/chance';
+import Answer from '../answer/answer';
 import Letters from '../letters/letters';
 import fetchGameData from '../../utils/fetchGameData/fetchGameData'
 import selectRandomCounty from "../../utils/selectRandomCounty/selectRandomCounty";
@@ -9,7 +9,7 @@ import selectRandomCounty from "../../utils/selectRandomCounty/selectRandomCount
 
 export default class Game extends React.Component {
     state = {
-        chances: 5, 
+        chances: 5,
         country: '',
         city: '',
         selectedLettersArray: [],
@@ -23,21 +23,33 @@ export default class Game extends React.Component {
             });
     }
 
-    handleSelected = (event) => {
-        const selectedLetter = event.target.firstChild.textContent;
-        this.setState(({ selectedLettersArray }) => {
-            selectedLettersArray.push(selectedLetter);
-            return {selectedLettersArray}
-        })
+    letterMatch = () => {
+        const letters = this.state.selectedLettersArray;
 
 
     }
 
+    handleSelected = (event) => {
+        const selectedLetter = event.target.firstChild.textContent;
+        const city = this.state.city.toUpperCase();
+        if (city.indexOf(selectedLetter) != -1) {
+            console.log("It's a match");
+        }
+        else {
+            this.setState((prevState) => {
+                return {
+                    chances: prevState.chances - 1,
+                }
+            })
+        }
+
+    }
+
     render() {
-       
+
         return (
             <React.Fragment>
-                <Hint country={this.state.country}/>
+                <Hint country={this.state.country} />
                 <Chance chances={this.state.chances} />
                 <Answer city={this.state.city} />
                 <Letters selectHandler={this.handleSelected} />
