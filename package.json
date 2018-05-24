@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://fac-13.github.io/LG-Game/",
   "scripts": {
     "start": "parcel index.html",
-    "test": "jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "build": "parcel build index.html"
   },
