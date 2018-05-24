@@ -10,14 +10,14 @@ describe('Test fetchGameData', () => {
   afterAll(() => fetchMock.restore());
 
   test('Test fetchGameData is mocked', () => {
-    return fetchGameData()
+    return fetchGameData('europe')
       .then((countriesArray) => {
         expect(countriesArray.length).toBe(dummyGameData.length);
       });
   });
 
   test('Test fetchGameData response format', async () => {
-    const countriesArray = await fetchGameData();
+    const countriesArray = await fetchGameData('europe');
     expect(countriesArray.length).toBe(dummyGameData.length);
     const mergedCountriesObj = countriesArray
       .reduce((accumulator, currentObj) => Object.assign(accumulator, currentObj), {});
@@ -29,7 +29,7 @@ describe('Test fetchGameData', () => {
 
 describe('Test fetchGameData after mocking', () => {
   test('Test fetchGameData was mocked', () => {
-    return fetchGameData()
+    return fetchGameData('europe')
       .then((countriesArray) => {
         expect(countriesArray.length).not.toBe(dummyGameData.length)
       });
