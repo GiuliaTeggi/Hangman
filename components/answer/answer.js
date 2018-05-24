@@ -6,7 +6,7 @@ const Answer = (props) => {
     const listItems = city.split('').map((char, index) => <li key={index + char.toUpperCase()}>_</li>); 
     return (
       <ul>{listItems}</ul>
-    );
+    )
   }
 
 export default Answer; 
