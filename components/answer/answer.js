@@ -1,5 +1,4 @@
 import React from 'react'; 
-import '../../style.css'
 
 const Answer = (props) => {
     const city = props.city; 
