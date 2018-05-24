@@ -8,7 +8,7 @@ const Letters = (props) => {
     const listItems = alphabet.map((el) =>
     <li onClick={props.selectHandler} key={el}><button >{el}</button></li>); 
     return (
-        <ul className="letterName">{listItems}</ul>
+        <ul className="keyboard">{listItems}</ul>
     );
 }
 
