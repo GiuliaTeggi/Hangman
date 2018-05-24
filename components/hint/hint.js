@@ -1,4 +1,4 @@
-import  React from 'react'; 
+import React from 'react'; 
 
 const Hint = props => <h3>What's the capital of {props.country}?</h3>; 
 

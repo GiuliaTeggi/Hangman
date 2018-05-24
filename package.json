@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "sanitize.css": "^5.0.0"
   }
 }
