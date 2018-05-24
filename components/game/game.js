@@ -12,6 +12,7 @@ export default class Game extends React.Component {
         chances: 5, 
         country: '',
         city: '',
+        selectedLettersArray: [],
     }
 
     componentDidMount() {
@@ -22,9 +23,14 @@ export default class Game extends React.Component {
             });
     }
 
-    handleSelected(event) {
-        console.log('letter clicked');
-        console.log(event.target);
+    handleSelected = (event) => {
+        const selectedLetter = event.target.firstChild.textContent;
+        this.setState(({ selectedLettersArray }) => {
+            selectedLettersArray.push(selectedLetter);
+            return {selectedLettersArray}
+        })
+
+
     }
 
     render() {
