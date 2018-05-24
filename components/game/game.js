@@ -40,9 +40,15 @@ export default class Game extends React.Component {
                 return {
                     chances: prevState.chances - 1,
                 }
-            })
+            }, this.checkChances)
         }
-
+    }
+    
+    checkChances = () => {
+        const chances = this.state.chances; 
+        if (chances == 0){
+            this.props.updatePlay(); 
+        }
     }
 
     render() {

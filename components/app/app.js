@@ -7,15 +7,24 @@ export default class App extends React.Component {
         playing: true,
     }
 
-    render() {
-       
-        return (
-            <React.Fragment>
-                <Title />
-                <Game />
-            </React.Fragment>
-        )
+    updatePlay = () => {
+        this.setState((prevState) => {
+            console.log("UpdatePlay reached"); 
+            return {
+                playing: !prevState.playing
+            }
+        })
     }
-}
+
+    render() {
+
+            return (
+                <React.Fragment>
+                    <Title />
+                    <Game updatePlay={this.updatePlay} />
+                </React.Fragment>
+            )
+        }
+    }
 
 
