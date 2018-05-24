@@ -6,13 +6,12 @@ import Letters from '../letters/letters';
 import fetchGameData from '../../utils/fetchGameData/fetchGameData'
 import selectRandomCounty from "../../utils/selectRandomCounty/selectRandomCounty";
 
-
 export default class Game extends React.Component {
     state = {
         chances: 5,
         country: '',
         city: '',
-        selectedLettersArray: [],
+        matchingLetters: []
     }
 
     componentDidMount() {
@@ -23,17 +22,19 @@ export default class Game extends React.Component {
             });
     }
 
-    letterMatch = () => {
-        const letters = this.state.selectedLettersArray;
-
-
-    }
-
     handleSelected = (event) => {
         const selectedLetter = event.target.firstChild.textContent;
         const city = this.state.city.toUpperCase();
+
         if (city.indexOf(selectedLetter) != -1) {
             console.log("It's a match");
+            this.setState((prevState) => {
+                const newArray = prevState.matchingLetters; 
+                newArray.push(selectedLetter); 
+                return {
+                    matchingLetters: newArray
+                }
+            })
         }
         else {
             this.setState((prevState) => {
@@ -57,8 +58,8 @@ export default class Game extends React.Component {
             <React.Fragment>
                 <Hint country={this.state.country} />
                 <Chance chances={this.state.chances} />
-                <Answer city={this.state.city} />
-                <Letters selectHandler={this.handleSelected} />
+                <Answer city={this.state.city} matchingLetters={this.state.matchingLetters}/>
+                <Letters selectHandler={this.handleSelected}/>
             </React.Fragment>
         )
     }
