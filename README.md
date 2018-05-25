@@ -1,1 +1,1 @@
-# LG-Game
+# Capital Cities Hangman
