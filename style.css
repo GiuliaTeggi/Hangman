@@ -1,0 +1,27 @@
+#root {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-around; 
+    align-items: center; 
+}
+
+ul {
+    padding: 0; 
+}
+
+li {
+    list-style-type: none; 
+    display: inline;  
+}
+
+.answer {
+    margin-left: 1em; 
+}
+
+li button {
+    margin: 0.5em; 
+}
+
+.keyboard {
+    max-width: 50vw; 
+}
