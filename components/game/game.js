@@ -1,6 +1,8 @@
 import React from 'react';
 import Hint from '../hint/hint';
 import Chance from '../chance/chance';
+import Score from '../score/score'; 
+import Modal from '../modal/modal';
 import Answer from '../answer/answer';
 import Letters from '../letters/letters';
 import fetchGameData from '../../utils/fetchGameData/fetchGameData'
@@ -8,18 +10,29 @@ import selectRandomCounty from "../../utils/selectRandomCounty/selectRandomCount
 
 export default class Game extends React.Component {
     state = {
-        chances: 5,
         country: '',
         city: '',
-        matchingLetters: []
+        chances: '',
+        score: 0,
+        matchingLetters: [],
+        openModal: false
     }
 
-    componentDidMount() {
+    startGame = () => {
         fetchGameData()
             .then(selectRandomCounty)
             .then(({ country, city }) => {
                 this.setState({ country, city });
-            });
+            })
+            .then(() => this.setState(({ chances }) => {
+                return {
+                    chances: chances + 5
+                }
+            }))
+    }
+
+    componentDidMount() {
+        this.startGame();
     }
 
     handleSelected = (event) => {
@@ -27,28 +40,42 @@ export default class Game extends React.Component {
         const city = this.state.city.toUpperCase();
 
         if (city.indexOf(selectedLetter) != -1) {
-            console.log("It's a match");
-            this.setState((prevState) => {
-                const newArray = prevState.matchingLetters; 
-                newArray.push(selectedLetter); 
+            this.setState(({ matchingLetters }) => {
+                const newArray = matchingLetters;
+                newArray.push(selectedLetter);
                 return {
                     matchingLetters: newArray
                 }
             })
         }
         else {
-            this.setState((prevState) => {
+            this.setState(({ chances }) => {
                 return {
-                    chances: prevState.chances - 1,
+                    chances: chances - 1,
                 }
             }, this.checkChances)
         }
     }
-    
+
+    playAgain = () => {
+        if (this.state.showModal === false) {
+            this.startGame();
+        }
+    }
+
+    showModal = () => {
+        this.setState(({ showModal }) => {
+            return {
+                showModal: !showModal
+            }
+        }, this.playAgain)
+    }
+
     checkChances = () => {
-        const chances = this.state.chances; 
-        if (chances == 0){
-            this.props.updatePlay(); 
+        const chances = this.state.chances;
+        if (chances == 0) {
+            this.props.updatePlay();
+            this.showModal();
         }
     }
 
@@ -58,8 +85,11 @@ export default class Game extends React.Component {
             <React.Fragment>
                 <Hint country={this.state.country} />
                 <Chance chances={this.state.chances} />
-                <Answer city={this.state.city} matchingLetters={this.state.matchingLetters}/>
-                <Letters selectHandler={this.handleSelected}/>
+                <Score score={this.state.score}/> 
+                {this.state.openModal &&
+                    <Modal showModal={this.showModal} />}
+                <Answer city={this.state.city} matchingLetters={this.state.matchingLetters} />
+                <Letters selectHandler={this.handleSelected} />
             </React.Fragment>
         )
     }

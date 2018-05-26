@@ -6,9 +6,9 @@ const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
 
 const Letters = (props) => {
     const listItems = alphabet.map((el) =>
-    <li onClick={props.selectHandler} key={el}><button >{el}</button></li>); 
+    <li  key={el}><button onClick={props.selectHandler}>{el}</button></li>); 
     return (
-        <ul className="keyboard">{listItems}</ul>
+        <ul className="game">{listItems}</ul>
     );
 }
 
