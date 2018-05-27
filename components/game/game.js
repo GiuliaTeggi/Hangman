@@ -13,7 +13,7 @@ export default class Game extends React.Component {
         country: '',
         city: '',
         cityArray: [],
-        chances: '',
+        chances: 5,
         score: 0,
         lettersArray: [],
         openModal: false
@@ -23,13 +23,16 @@ export default class Game extends React.Component {
         fetchGameData()
             .then(selectRandomCounty)
             .then(({ country, city, cityArray }) => {
-                this.setState({ country, city });
+                this.setState({ 
+                    country: country, 
+                    city: city.normalize('NFD').replace(/[\u0300-\u036f]/g, '')});
             })
             .then(() => this.setState(({ chances, cityArray }) => {
                 console.log("City", this.state.city)
                 return {
-                    chances: chances + 5,
-                    cityArray: this.state.city.toUpperCase().split(''), 
+                    cityArray: this.state.city.toUpperCase().replace(/\s/g, '').split(''),
+                    //reset chances to 5 
+                    chances: 5, 
                     //reset lettersArray to empty array
                     lettersArray: []
                 }
@@ -54,7 +57,6 @@ export default class Game extends React.Component {
                     lettersArray: newLettersArray
                 }
             }, () => {
-                console.log("Updated city array", this.state.cityArray)
                 if (this.state.cityArray.length === 0){
                     this.setState(({ score }) => {
                         return {
@@ -81,7 +83,6 @@ export default class Game extends React.Component {
     }
 
     showModal = () => {
-        console.log("Showmodal reached")
         this.setState(({ openModal }) => {
             return {
                 openModal: !openModal
