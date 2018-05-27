@@ -1,7 +1,7 @@
 import React from 'react';
 import Hint from '../hint/hint';
 import Chance from '../chance/chance';
-import Score from '../score/score'; 
+import Score from '../score/score';
 import Modal from '../modal/modal';
 import Answer from '../answer/answer';
 import Letters from '../letters/letters';
@@ -12,21 +12,26 @@ export default class Game extends React.Component {
     state = {
         country: '',
         city: '',
+        cityArray: [],
         chances: '',
         score: 0,
-        matchingLetters: [],
+        lettersArray: [],
         openModal: false
     }
 
     startGame = () => {
         fetchGameData()
             .then(selectRandomCounty)
-            .then(({ country, city }) => {
+            .then(({ country, city, cityArray }) => {
                 this.setState({ country, city });
             })
-            .then(() => this.setState(({ chances }) => {
+            .then(() => this.setState(({ chances, cityArray }) => {
+                console.log("City", this.state.city)
                 return {
-                    chances: chances + 5
+                    chances: chances + 5,
+                    cityArray: this.state.city.toUpperCase().split(''), 
+                    //reset lettersArray to empty array
+                    lettersArray: []
                 }
             }))
     }
@@ -37,14 +42,25 @@ export default class Game extends React.Component {
 
     handleSelected = (event) => {
         const selectedLetter = event.target.firstChild.textContent;
-        const city = this.state.city.toUpperCase();
-
-        if (city.indexOf(selectedLetter) != -1) {
-            this.setState(({ matchingLetters }) => {
-                const newArray = matchingLetters;
-                newArray.push(selectedLetter);
+        const lettersArray = this.state.lettersArray;
+        console.log("City array", this.state.cityArray)
+        if (this.state.cityArray.indexOf(selectedLetter) !== -1) {
+            const newCityArray = this.state.cityArray.filter((char) => char != selectedLetter); 
+            const newLettersArray = lettersArray;
+            newLettersArray.push(selectedLetter);
+            this.setState(({ cityArray, lettersArray }) => {
                 return {
-                    matchingLetters: newArray
+                    cityArray: newCityArray,
+                    lettersArray: newLettersArray
+                }
+            }, () => {
+                console.log("Updated city array", this.state.cityArray)
+                if (this.state.cityArray.length === 0){
+                    this.setState(({ score }) => {
+                        return {
+                            score: score + 1, 
+                        }
+                    }, this.showModal)
                 }
             })
         }
@@ -58,17 +74,19 @@ export default class Game extends React.Component {
     }
 
     playAgain = () => {
-        if (this.state.showModal === false) {
+        if (this.state.openModal === true) {
             this.startGame();
+            this.showModal(); 
         }
     }
 
     showModal = () => {
-        this.setState(({ showModal }) => {
+        console.log("Showmodal reached")
+        this.setState(({ openModal }) => {
             return {
-                showModal: !showModal
+                openModal: !openModal
             }
-        }, this.playAgain)
+        })
     }
 
     checkChances = () => {
@@ -76,6 +94,7 @@ export default class Game extends React.Component {
         if (chances == 0) {
             this.props.updatePlay();
             this.showModal();
+            this.playAgain(); 
         }
     }
 
@@ -85,10 +104,10 @@ export default class Game extends React.Component {
             <React.Fragment>
                 <Hint country={this.state.country} />
                 <Chance chances={this.state.chances} />
-                <Score score={this.state.score}/> 
+                <Score score={this.state.score} />
                 {this.state.openModal &&
-                    <Modal showModal={this.showModal} />}
-                <Answer city={this.state.city} matchingLetters={this.state.matchingLetters} />
+                    <Modal playAgain={this.playAgain} />}
+                <Answer city={this.state.city} matchingLetters={this.state.lettersArray} />
                 <Letters selectHandler={this.handleSelected} />
             </React.Fragment>
         )
