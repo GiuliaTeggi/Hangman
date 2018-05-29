@@ -23,16 +23,17 @@ export default class Game extends React.Component {
         fetchGameData()
             .then(selectRandomCounty)
             .then(({ country, city, cityArray }) => {
-                this.setState({ 
-                    country: country, 
-                    city: city.normalize('NFD').replace(/[\u0300-\u036f]/g, '')});
+                this.setState({
+                    country: country,
+                    city: city.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                });
             })
             .then(() => this.setState(({ chances, cityArray }) => {
                 console.log("City", this.state.city)
                 return {
                     cityArray: this.state.city.toUpperCase().replace(/\s/g, '').split(''),
                     //reset chances to 5 
-                    chances: 5, 
+                    chances: 5,
                     //reset lettersArray to empty array
                     lettersArray: []
                 }
@@ -48,7 +49,7 @@ export default class Game extends React.Component {
         const lettersArray = this.state.lettersArray;
         console.log("City array", this.state.cityArray)
         if (this.state.cityArray.indexOf(selectedLetter) !== -1) {
-            const newCityArray = this.state.cityArray.filter((char) => char != selectedLetter); 
+            const newCityArray = this.state.cityArray.filter((char) => char != selectedLetter);
             const newLettersArray = lettersArray;
             newLettersArray.push(selectedLetter);
             this.setState(({ cityArray, lettersArray }) => {
@@ -57,10 +58,10 @@ export default class Game extends React.Component {
                     lettersArray: newLettersArray
                 }
             }, () => {
-                if (this.state.cityArray.length === 0){
+                if (this.state.cityArray.length === 0) {
                     this.setState(({ score }) => {
                         return {
-                            score: score + 1, 
+                            score: score + 1,
                         }
                     }, this.showModal)
                 }
@@ -78,7 +79,7 @@ export default class Game extends React.Component {
     playAgain = () => {
         if (this.state.openModal === true) {
             this.startGame();
-            this.showModal(); 
+            this.showModal();
         }
     }
 
@@ -95,7 +96,7 @@ export default class Game extends React.Component {
         if (chances == 0) {
             this.props.updatePlay();
             this.showModal();
-            this.playAgain(); 
+            this.playAgain();
         }
     }
 
@@ -107,7 +108,10 @@ export default class Game extends React.Component {
                 <Chance chances={this.state.chances} />
                 <Score score={this.state.score} />
                 {this.state.openModal &&
-                    <Modal playAgain={this.playAgain} />}
+                    <Modal playAgain={this.playAgain}
+                        score={this.state.score}
+                        country={this.state.country}
+                        city={this.state.city} />}
                 <Answer city={this.state.city} matchingLetters={this.state.lettersArray} />
                 <Letters selectHandler={this.handleSelected} />
             </React.Fragment>
