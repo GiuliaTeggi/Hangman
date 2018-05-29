@@ -16,7 +16,7 @@ export default class Game extends React.Component {
         chances: 5,
         score: 0,
         lettersArray: [],
-        openModal: false
+        openModal: false, 
     }
 
     startGame = () => {
@@ -109,7 +109,7 @@ export default class Game extends React.Component {
                 <Score score={this.state.score} />
                 {this.state.openModal &&
                     <Modal playAgain={this.playAgain}
-                        score={this.state.score}
+                        win={this.state.cityArray}
                         country={this.state.country}
                         city={this.state.city} />}
                 <Answer city={this.state.city} matchingLetters={this.state.lettersArray} />
